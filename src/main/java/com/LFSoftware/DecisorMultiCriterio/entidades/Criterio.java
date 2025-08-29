@@ -4,12 +4,14 @@ import java.util.Objects;
 import java.util.UUID;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
+@Entity
 public class Criterio {
 	
 	@Id
@@ -18,19 +20,19 @@ public class Criterio {
 	
 	private String referencia; // referencia que identifica qual critério está sendo julgado;
 	
-	private Long probMelhor; // probabilidade de ser melhor/
+	private Double probMelhor; // probabilidade de ser melhor/
 	
-	private Long probPior;  // necessário para a normalização;
+	private Double probPior;  // probabilidade de ser pior;
 	
 	private int valor; // valor fornecido pelo decisor, segue a escala de 1 a 5;
 	
-	private int valor_normalizado; // valor normalizado
+	private Double valor_normalizado; // valor normalizado
 	
-	private Long peso; // peso de cada critério;
+	private Double peso; // peso de cada critério;
 	
-	private Long valorTriangular; // valor da triangular desse criterio;
+	private Double valorTriangular; // valor da triangular desse criterio;
 	
-	private Long valorBetaPath; // valor da beta path.
+	private Double valorBetaPath; // valor da beta path.
 	
 	@ManyToOne(optional=false, cascade = CascadeType.ALL) 
     @JoinColumn(name="decisor_alter", nullable=false, updatable=false)
@@ -54,19 +56,19 @@ public class Criterio {
 		this.referencia = referencia;
 	}
 
-	public Long getProbMelhor() {
+	public Double getProbMelhor() {
 		return probMelhor;
 	}
 
-	public void setProbMelhor(Long probMelhor) {
+	public void setProbMelhor(Double probMelhor) {
 		this.probMelhor = probMelhor;
 	}
 
-	public Long getProbPior() {
+	public Double getProbPior() {
 		return probPior;
 	}
 
-	public void setProbPior(Long probPior) {
+	public void setProbPior(Double probPior) {
 		this.probPior = probPior;
 	}
 
@@ -78,35 +80,35 @@ public class Criterio {
 		this.valor = valor;
 	}
 
-	public int getValor_normalizado() {
+	public Double getValor_normalizado() {
 		return valor_normalizado;
 	}
 
-	public void setValor_normalizado(int valor_normalizado) {
+	public void setValor_normalizado(Double valor_normalizado) {
 		this.valor_normalizado = valor_normalizado;
 	}
 
-	public Long getPeso() {
+	public Double getPeso() {
 		return peso;
 	}
 
-	public void setPeso(Long peso) {
+	public void setPeso(Double peso) {
 		this.peso = peso;
 	}
 
-	public Long getValorTriangular() {
+	public Double getValorTriangular() {
 		return valorTriangular;
 	}
 
-	public void setValorTriangular(Long valorTriangular) {
+	public void setValorTriangular(Double valorTriangular) {
 		this.valorTriangular = valorTriangular;
 	}
 
-	public Long getValorBetaPath() {
+	public Double getValorBetaPath() {
 		return valorBetaPath;
 	}
 
-	public void setValorBetaPath(Long valorBetaPath) {
+	public void setValorBetaPath(Double valorBetaPath) {
 		this.valorBetaPath = valorBetaPath;
 	}
 
