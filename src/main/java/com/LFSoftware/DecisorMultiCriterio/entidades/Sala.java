@@ -27,7 +27,11 @@ public class Sala {
 	
 	private boolean concluido;  // Se a tomada de decisão já foi concluida;
 	
-	private List<String> RankingFinal; // Ranking final das alternativas.
+	private boolean fase1concluida;  // Se todos os tomadores de decisão concluiram a sua parte;
+
+	private boolean normalizar; // se os criterios devem ser normalizados;
+	
+	private List<Alternativa> RankingFinal; // Ranking final das alternativas.
 	
 	@ManyToOne(optional=false) 
     @JoinColumn(name="analis_sala", nullable=false, updatable=false)
@@ -46,10 +50,10 @@ public class Sala {
 		
 		this.decisores = new ArrayList<Decisor>();
 		
-		this.RankingFinal = new ArrayList<String>();
+		this.RankingFinal = new ArrayList<Alternativa>();
 		
 	}
-
+	
 	public UUID getId_sala() {
 		return id_sala;
 	}
@@ -82,11 +86,11 @@ public class Sala {
 		this.concluido = concluido;
 	}
 
-	public List<String> getRankingFinal() {
+	public List<Alternativa> getRankingFinal() {
 		return RankingFinal;
 	}
 
-	public void setRankingFinal(List<String> rankingFinal) {
+	public void setRankingFinal(List<Alternativa> rankingFinal) {
 		RankingFinal = rankingFinal;
 	}
 
@@ -124,6 +128,23 @@ public class Sala {
 				&& Objects.equals(analista, other.analista) && concluido == other.concluido
 				&& Objects.equals(decisores, other.decisores) && Objects.equals(id_sala, other.id_sala)
 				&& numAlternativas == other.numAlternativas;
+	}
+
+	public boolean isFase1concluida() {
+		return fase1concluida;
+	}
+
+	public void setFase1concluida(boolean fase1concluida) {
+		this.fase1concluida = fase1concluida;
+	}
+
+
+	public boolean isNormalizar() {
+		return normalizar;
+	}
+
+	public void setNormalizar(boolean normalizar) {
+		this.normalizar = normalizar;
 	}
 	
 	

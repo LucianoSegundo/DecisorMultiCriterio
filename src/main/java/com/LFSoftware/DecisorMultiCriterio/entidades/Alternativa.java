@@ -1,6 +1,5 @@
 package com.LFSoftware.DecisorMultiCriterio.entidades;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -26,7 +25,7 @@ public class Alternativa {
 	
 	private int menorCriterio;  // necessário para a normalização
 	
-	private BigDecimal probaAgregado;  // probabilidade agregado de todos os critérios da alternativa.
+	private Double probaAgregado;  // probabilidade agregado de todos os critérios da alternativa.
 	
 	@ManyToOne(optional=false, cascade = CascadeType.ALL) 
     @JoinColumn(name="decisor_alter", nullable=false, updatable=false)
@@ -34,7 +33,15 @@ public class Alternativa {
 	
 	@OneToMany(mappedBy = "alter", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Criterio> criterios;
-
+	
+	public void agregarProbMelhor() {
+		
+	}
+	
+	public void agregarProbPior() {
+		
+	}
+	
 	public UUID getId_alter() {
 		return id_alter;
 	}
@@ -67,11 +74,11 @@ public class Alternativa {
 		this.menorCriterio = menorCriterio;
 	}
 
-	public BigDecimal getProbaAgregado() {
+	public Double getProbaAgregado() {
 		return probaAgregado;
 	}
 
-	public void setProbaAgregado(BigDecimal probaAgregado) {
+	public void setProbaAgregado(Double probaAgregado) {
 		this.probaAgregado = probaAgregado;
 	}
 

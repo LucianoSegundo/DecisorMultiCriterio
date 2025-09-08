@@ -33,6 +33,9 @@ public class Decisor {
 	@OneToMany(mappedBy = "decisor", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Alternativa> alternativa;
 	
+	@OneToMany(mappedBy = "decisor", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Alternativa> alternativasOrdenadas;
+	
 	public Decisor() {}
 	
 	public Decisor(String referencia, Sala sala, Set<Alternativa> alternativa) {
