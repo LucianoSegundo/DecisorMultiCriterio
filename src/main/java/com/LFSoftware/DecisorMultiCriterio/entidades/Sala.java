@@ -20,40 +20,41 @@ public class Sala {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id_sala;
-	
-	private int numAlternativas;  // Número de alternativas por critério.
-	
-	private int NumCriterios;  // Número de criterios por alternativa;
-	
-	private boolean concluido;  // Se a tomada de decisão já foi concluida;
-	
-	private boolean fase1concluida;  // Se todos os tomadores de decisão concluiram a sua parte;
 
+	// caracteristicas da sala
+	private int numAlternativas; // Número de alternativas por critério.
+	private int NumCriterios; // Número de criterios por alternativa;
 	private boolean normalizar; // se os criterios devem ser normalizados;
-	
-	private List<Alternativa> RankingFinal; // Ranking final das alternativas.
-	
-	@ManyToOne(optional=false) 
-    @JoinColumn(name="analis_sala", nullable=false, updatable=false)
+
+	// utilitarios
+	private boolean concluido; // Se a tomada de decisão já foi concluida;
+	private boolean fase1concluida; // Se todos os tomadores de decisão concluiram a sua parte;
+
+	@OneToMany(mappedBy = "sala", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Alternativa> alternativas; // Ranking final das alternativas.
+
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "analis_sala", nullable = false, updatable = false)
 	private Analista analista;
-	
+
 	@OneToMany(mappedBy = "sala", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Decisor> decisores;
-	
-	public Sala() {}
-	
-	public Sala(Analista analista) {
-		
-		this.concluido = false;
-		
-		this.analista = analista;
-		
-		this.decisores = new ArrayList<Decisor>();
-		
-		this.RankingFinal = new ArrayList<Alternativa>();
-		
+
+	public Sala() {
 	}
-	
+
+	public Sala(Analista analista) {
+
+		this.concluido = false;
+
+		this.analista = analista;
+
+		this.decisores = new ArrayList<Decisor>();
+
+		this.alternativas = new ArrayList<Alternativa>();
+
+	}
+
 	public UUID getId_sala() {
 		return id_sala;
 	}
@@ -86,12 +87,12 @@ public class Sala {
 		this.concluido = concluido;
 	}
 
-	public List<Alternativa> getRankingFinal() {
-		return RankingFinal;
+	public List<Alternativa> getAlternativas() {
+		return alternativas;
 	}
 
-	public void setRankingFinal(List<Alternativa> rankingFinal) {
-		RankingFinal = rankingFinal;
+	public void setAlternativas(List<Alternativa> alternativas) {
+		this.alternativas = alternativas;
 	}
 
 	public Analista getAnalista() {
@@ -112,7 +113,7 @@ public class Sala {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(NumCriterios, RankingFinal, analista, concluido, decisores, id_sala, numAlternativas);
+		return Objects.hash(NumCriterios, alternativas, analista, concluido, decisores, id_sala, numAlternativas);
 	}
 
 	@Override
@@ -124,7 +125,7 @@ public class Sala {
 		if (getClass() != obj.getClass())
 			return false;
 		Sala other = (Sala) obj;
-		return NumCriterios == other.NumCriterios && Objects.equals(RankingFinal, other.RankingFinal)
+		return NumCriterios == other.NumCriterios && Objects.equals(alternativas, other.alternativas)
 				&& Objects.equals(analista, other.analista) && concluido == other.concluido
 				&& Objects.equals(decisores, other.decisores) && Objects.equals(id_sala, other.id_sala)
 				&& numAlternativas == other.numAlternativas;
@@ -138,7 +139,6 @@ public class Sala {
 		this.fase1concluida = fase1concluida;
 	}
 
-
 	public boolean isNormalizar() {
 		return normalizar;
 	}
@@ -146,7 +146,5 @@ public class Sala {
 	public void setNormalizar(boolean normalizar) {
 		this.normalizar = normalizar;
 	}
-	
-	
-	
+
 }

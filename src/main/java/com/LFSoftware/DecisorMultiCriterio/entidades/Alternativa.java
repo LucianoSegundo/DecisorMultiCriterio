@@ -12,36 +12,53 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+
 @Entity
 public class Alternativa {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id_alter;
-	
+
+	private Double probMelhor; // probabilidade agregado de todos os critérios da alternativa.
+	private Double probPior; // probabilidade agregado de todos os critérios da alternativa.
+
+	private Double OP; // Valor do perfil de avaliação Optimistic/progressive
+	private Double OC; // Valor do perfil de avaliação Optimistic/conservative
+	private Double PPe; // Valor do perfil de avaliação Pessimistic/progressive
+	private Double PC; // Valor do perfil de avaliação Pessimistic/conservative
+
+	// variaveis de agregação
+
+	private Double ProMelhorAgregado; // probabilidade agregada de uma alternativa ser a melhor. Essa caracteristica é
+										// armazenada na copia da alternativa vinculada a sala.
+	private Double ProPiorAgregado; // probabilidade agregada de uma alternativa ser a melhor. Essa caracteristica é
+									// armazenada na copia da alternativa vinculada a sala.
+
+	private Double OPAgregado; // Valor do perfil de avaliação Optimistic/progressive
+	private Double OCAgregado; // Valor do perfil de avaliação Optimistic/conservative
+	private Double PPeAgregado; // Valor do perfil de avaliação Pessimistic/progressive
+	private Double PCAgregado; // Valor do perfil de avaliação Pessimistic/conservative
+
+	// utilitarios
+
 	private String referencia; // referencia que identifica qual critério está sendo julgado;
-	
 	private int maiorCriterio; // necessário para a normalização
-	
-	private int menorCriterio;  // necessário para a normalização
-	
-	private Double probaAgregado;  // probabilidade agregado de todos os critérios da alternativa.
-	
-	@ManyToOne(optional=false, cascade = CascadeType.ALL) 
-    @JoinColumn(name="decisor_alter", nullable=false, updatable=false)
-	private Decisor decisor;
-	
+	private int menorCriterio; // necessário para a normalização
+
+	// mapeamento
+
 	@OneToMany(mappedBy = "alter", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Criterio> criterios;
-	
-	public void agregarProbMelhor() {
-		
-	}
-	
-	public void agregarProbPior() {
-		
-	}
-	
+
+	@ManyToOne(optional = false, cascade = CascadeType.ALL)
+	@JoinColumn(name = "decisor_alter", nullable = false, updatable = false)
+	private Decisor decisor;
+
+	@ManyToOne(optional = true)
+	@JoinColumn(name = "sala_alter", nullable = true)
+	private Sala sala;
+
 	public UUID getId_alter() {
 		return id_alter;
 	}
@@ -74,14 +91,6 @@ public class Alternativa {
 		this.menorCriterio = menorCriterio;
 	}
 
-	public Double getProbaAgregado() {
-		return probaAgregado;
-	}
-
-	public void setProbaAgregado(Double probaAgregado) {
-		this.probaAgregado = probaAgregado;
-	}
-
 	public Decisor getDecisor() {
 		return decisor;
 	}
@@ -98,10 +107,10 @@ public class Alternativa {
 		this.criterios = criterios;
 	}
 
-
 	@Override
 	public int hashCode() {
-		return Objects.hash(criterios, decisor, id_alter, maiorCriterio, menorCriterio, probaAgregado, referencia);
+		return Objects.hash(criterios, decisor, id_alter, maiorCriterio, menorCriterio, probMelhor, probPior,
+				referencia);
 	}
 
 	@Override
@@ -115,7 +124,101 @@ public class Alternativa {
 		Alternativa other = (Alternativa) obj;
 		return Objects.equals(referencia, other.referencia);
 	}
-	
-	
-	
+
+	public Double getProbMelhor() {
+		return probMelhor;
+	}
+
+	public void setProbMelhor(Double probMelhor) {
+		this.probMelhor = probMelhor;
+	}
+
+	public Double getProbPior() {
+		return probPior;
+	}
+
+	public void setProbPior(Double probPior) {
+		this.probPior = probPior;
+	}
+
+	public Double getProMelhorAgregado() {
+		return ProMelhorAgregado;
+	}
+
+	public void setProMelhorAgregado(Double proMelhorAgregado) {
+		ProMelhorAgregado = proMelhorAgregado;
+	}
+
+	public Double getProPiorAgregado() {
+		return ProPiorAgregado;
+	}
+
+	public void setProPiorAgregado(Double proPiorAgregado) {
+		ProPiorAgregado = proPiorAgregado;
+	}
+
+	public Double getOP() {
+		return OP;
+	}
+
+	public void setOP(Double oP) {
+		OP = oP;
+	}
+
+	public Double getOC() {
+		return OC;
+	}
+
+	public void setOC(Double oC) {
+		OC = oC;
+	}
+
+	public Double getPPe() {
+		return PPe;
+	}
+
+	public void setPPe(Double pPe) {
+		PPe = pPe;
+	}
+
+	public Double getPC() {
+		return PC;
+	}
+
+	public void setPC(Double pC) {
+		PC = pC;
+	}
+
+	public Double getOPAgregado() {
+		return OPAgregado;
+	}
+
+	public void setOPAgregado(Double oPAgregado) {
+		OPAgregado = oPAgregado;
+	}
+
+	public Double getOCAgregado() {
+		return OCAgregado;
+	}
+
+	public void setOCAgregado(Double oCAgregado) {
+		OCAgregado = oCAgregado;
+	}
+
+	public Double getPPeAgregado() {
+		return PPeAgregado;
+	}
+
+	public void setPPeAgregado(Double pPeAgregado) {
+		PPeAgregado = pPeAgregado;
+	}
+
+	public Double getPCAgregado() {
+		return PCAgregado;
+	}
+
+	public void setPCAgregado(Double pCAgregado) {
+		PCAgregado = pCAgregado;
+	}
+
 }

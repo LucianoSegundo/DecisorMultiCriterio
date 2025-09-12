@@ -1,5 +1,6 @@
 package com.LFSoftware.DecisorMultiCriterio.entidades;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -31,14 +32,14 @@ public class Decisor {
 	private Sala sala;
 	
 	@OneToMany(mappedBy = "decisor", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<Alternativa> alternativa;
+	private List<Alternativa> alternativa;
 	
 	@OneToMany(mappedBy = "decisor", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Alternativa> alternativasOrdenadas;
 	
 	public Decisor() {}
 	
-	public Decisor(String referencia, Sala sala, Set<Alternativa> alternativa) {
+	public Decisor(String referencia, Sala sala, List<Alternativa> alternativa) {
 		this.alternativa = alternativa;
 		this.sala = sala;
 		this.referencia = referencia;
@@ -77,11 +78,11 @@ public class Decisor {
 		this.sala = sala;
 	}
 
-	public Set<Alternativa> getAlternativa() {
+	public List<Alternativa> getAlternativa() {
 		return alternativa;
 	}
 
-	public void setAlternativa(Set<Alternativa> alternativa) {
+	public void setAlternativa(List<Alternativa> alternativa) {
 		this.alternativa = alternativa;
 	}
 
