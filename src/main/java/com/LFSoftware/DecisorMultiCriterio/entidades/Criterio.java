@@ -40,6 +40,12 @@ public class Criterio {
 	
 	public Criterio(){}
 
+	public Criterio(String referencia2, int valor2, int posicao) {
+this.referencia = referencia2;
+this.valor = valor2;
+
+	}
+
 	public UUID getId_cri() {
 		return id_cri;
 	}

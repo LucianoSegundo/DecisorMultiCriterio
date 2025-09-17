@@ -59,6 +59,15 @@ public class Alternativa {
 	@JoinColumn(name = "sala_alter", nullable = true)
 	private Sala sala;
 
+	public Alternativa(String referencia2, Double maior, Double pior) {
+		this.referencia = referencia2;
+		this.probMelhor = maior;
+		this.probPior = pior;
+		
+		this.maiorCriterio = 0;
+		this.menorCriterio = 0;
+		}
+
 	public UUID getId_alter() {
 		return id_alter;
 	}
