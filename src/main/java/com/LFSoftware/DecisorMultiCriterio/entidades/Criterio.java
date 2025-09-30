@@ -3,6 +3,8 @@ package com.LFSoftware.DecisorMultiCriterio.entidades;
 import java.util.Objects;
 import java.util.UUID;
 
+import org.apache.commons.math3.distribution.TriangularDistribution;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,9 +32,8 @@ public class Criterio {
 	
 	private Double peso; // peso de cada critério;
 	
-	private Double valorTriangular; // valor da triangular desse criterio;
+	private TriangularDistribution triargular; 
 	
-	private Double valorBetaPath; // valor da beta path.
 	
 	@ManyToOne(optional=false, cascade = CascadeType.ALL) 
     @JoinColumn(name="decisor_alter", nullable=false, updatable=false)
@@ -102,22 +103,6 @@ this.valor = valor2;
 		this.peso = peso;
 	}
 
-	public Double getValorTriangular() {
-		return valorTriangular;
-	}
-
-	public void setValorTriangular(Double valorTriangular) {
-		this.valorTriangular = valorTriangular;
-	}
-
-	public Double getValorBetaPath() {
-		return valorBetaPath;
-	}
-
-	public void setValorBetaPath(Double valorBetaPath) {
-		this.valorBetaPath = valorBetaPath;
-	}
-
 	public Alternativa getAlter() {
 		return alter;
 	}
@@ -128,8 +113,7 @@ this.valor = valor2;
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(alter, id_cri, peso, probMelhor, probPior, referencia, valor, valorBetaPath,
-				valorTriangular, valor_normalizado);
+		return Objects.hash(alter, id_cri, peso, probMelhor, probPior, referencia, valor, valor_normalizado);
 	}
 
 	@Override
@@ -143,6 +127,17 @@ this.valor = valor2;
 		Criterio other = (Criterio) obj;
 		return Objects.equals(referencia, other.referencia);
 	}
+
+	public TriangularDistribution getTriargular() {
+		return triargular;
+	}
+
+	public void setTriargular(TriangularDistribution triargular) {
+		this.triargular = triargular;
+	}
+
+
+	
 	
 	
 	

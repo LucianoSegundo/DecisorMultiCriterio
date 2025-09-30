@@ -5,20 +5,21 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.LFSoftware.DecisorMultiCriterio.entidades.Alternativa;
+import com.LFSoftware.DecisorMultiCriterio.entidades.Criterio;
 import com.LFSoftware.DecisorMultiCriterio.entidades.Decisor;
 import com.LFSoftware.DecisorMultiCriterio.entidades.Sala;
 
 @Service
 public class SalaService {
 
-	public SalaService() {};
-	
-	public List<Alternativa> hankearAlternativas(Sala sala){
+	public SalaService() {
+	};
+
+	public List<Alternativa> hankearAlternativas(Sala sala) {
 		System.out.println("classe: AlternativaService; Metodo hankearAlternativas; status: não implementado;");
 
-		return null;
+		return sala.getAlternativas();
 	}
-	
 
 	public void agregarProbabilidades(Sala sala) {
 
@@ -40,6 +41,36 @@ public class SalaService {
 
 		System.out.println("classe: AlternativaService; metodo: agregarProbabilidades; status: Implementado.");
 	} // Implementado
+
+	public void agregarProbabilidadesVersao2(Sala sala) {
+
+		int numeroDecisores = sala.getDecisores().size();
+
+		for (int i = 0; i < sala.getNumAlternativas(); i++) {
+
+			Double melhor = 0.0;
+			Double pior = 0.0;
+
+			for (Decisor decisor : sala.getDecisores()) {
+
+				Alternativa alter = decisor.getAlternativa().get(i);
+
+				for (Criterio cri : alter.getCriterios()) {
+
+					melhor += cri.getProbMelhor();
+					pior += cri.getProbPior();
+
+				}
+			}
+
+			Alternativa alter = sala.getAlternativas().get(i);
+			alter.setProMelhorAgregado(melhor * numeroDecisores);
+			alter.setProPiorAgregado(pior * numeroDecisores);
+
+		}
+
+		System.out.println("classe: AlternativaService; metodo: agregarProbabilidades; status: Implementado.");
+	} // Implementado?
 
 	public void calcularPerfisDecisao(Sala sala) {
 
@@ -96,5 +127,5 @@ public class SalaService {
 		System.out.println("classe: AlternativaService; metodo: agregarPerfisDecisao; status: Implementado.");
 
 	} // Imolementado
-	
+
 }

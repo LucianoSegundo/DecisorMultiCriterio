@@ -1,5 +1,8 @@
 package com.LFSoftware.DecisorMultiCriterio.service;
 
+import org.apache.commons.math3.analysis.UnivariateFunction;
+import org.apache.commons.math3.analysis.integration.RombergIntegrator;
+import org.apache.commons.math3.distribution.TriangularDistribution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +16,7 @@ public class AlternativaService {
 
 	@Autowired
 	private DecisorRepository deciRepo;
-	
+
 	public AlternativaService() {
 	}
 
@@ -72,25 +75,101 @@ public class AlternativaService {
 	} // Implementado
 
 	public void definirProb(Decisor decisor) {
+
+		// definir a triangular para cada criterio.
+		
 		for (Alternativa alter : decisor.getAlternativa()) {
 
-			this.definirProbMelhor(alter);
-			this.definirProbPior(alter);
+			for (Criterio criterio : alter.getCriterios()) {
+
+				this.definirTriangular(criterio);
+
+			}
+
+		}
+
+		// fazendo uma aberração da natureza, vulgo definir probabilidade
+
+		for (Alternativa alter : decisor.getAlternativa()) {
+
+			for (Criterio criterio : alter.getCriterios()) {
+
+				UnivariateFunction integrand1 = this.definirProbMelhor(criterio, decisor);
+				UnivariateFunction integrand2 = this.definirProbPior(criterio, decisor);
+
+				RombergIntegrator integrator = new RombergIntegrator();
+
+				criterio.setProbMelhor(integrator.integrate(1000, integrand1, 0.0, 1.0));
+				criterio.setProbPior(integrator.integrate(1000, integrand2, 0.0, 1.0));
+
+			}
+
 		}
 
 		decisor.setConcluido(true);
-		
-		this.deciRepo.save(decisor);
-		
-		System.out.println("classe: AlternativaService; metodo: definirProb; status: persistencia não implementada.");
-	} // Implementado entre aspas.
 
-	private void definirProbMelhor(Alternativa alter) {
-		System.out.println("classe: AlternativaService; Metodo definirProbAlteMelhor; status: não implementado;");
+		this.deciRepo.save(decisor);
+
+		System.out.println("classe: AlternativaService; metodo: definirProb; status: persistencia não implementada.");
+	} // Implementado, precisa ser testado.
+	
+	private void definirTriangular(Criterio cri) {
+
+		// 1. Parâmetros da Distribuição Triangular (com 5% de margem)
+		final double valor_Norma = cri.getValor_normalizado();
+		final double minimo = Math.max(0.0, valor_Norma - (valor_Norma * 0.05));
+		final double maximo = Math.min(1.0, valor_Norma + (valor_Norma * 0.05));
+
+		// Cria a distribuição para a alternativa-alvo
+		cri.setTriargular(new TriangularDistribution(minimo, valor_Norma, maximo));
+
 	}
 
-	private void definirProbPior(Alternativa alter) {
+	private UnivariateFunction definirProbMelhor(Criterio criterio, Decisor decisor) {
+
+		UnivariateFunction integrand = x -> {
+
+			// Produto das CDFs de todas as outras alternativas
+
+			double produtoCDFs = 1.0;
+
+			for (Alternativa acumulo : decisor.getAlternativa()) {
+
+				for (Criterio proba : acumulo.getCriterios()) {
+					produtoCDFs *= proba.getTriargular().cumulativeProbability(x);
+
+				}
+			}
+
+			return criterio.getTriargular().density(x) * produtoCDFs;
+		};
+		System.out.println("classe: AlternativaService; Metodo definirProbMelhor; status: não implementado;");
+
+		return integrand;
+	}
+
+	private UnivariateFunction definirProbPior(Criterio criterio, Decisor decisor) {
+
+		UnivariateFunction integrand = x -> {
+
+			// Produto das CDFs de todas as outras alternativas
+
+			double produtoCDFs = 1.0;
+
+			for (Alternativa acumulo : decisor.getAlternativa()) {
+
+				for (Criterio proba : acumulo.getCriterios()) {
+					produtoCDFs *= proba.getTriargular().cumulativeProbability(x);
+
+				}
+			}
+
+			return 1.0 - (criterio.getTriargular().density(x) * produtoCDFs);
+		};
+
 		System.out.println("classe: AlternativaService; Metodo definirProbAltePior; status: não implementado;");
+
+		return integrand;
 
 	}
 
